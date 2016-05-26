@@ -28,7 +28,7 @@ public interface ShippingService extends Service {
      *      }
      * }' http://localhost:9000/api/itinerary
      */
-     ServiceCall<NotUsed, Itinerary, Done> createItinerary();
+     ServiceCall<NotUsed,Done> createItinerary();
 
     /**
      * Adds a leg to an existing itinerary.
@@ -47,7 +47,7 @@ public interface ShippingService extends Service {
      * }' http://localhost:9000/api/itinerary/1/leg
      * }</pre>
      */
-    ServiceCall<String, Leg, Done> addLeg();
+    ServiceCall<String, Done> addLeg();
 
     @Override
     default Descriptor descriptor() {

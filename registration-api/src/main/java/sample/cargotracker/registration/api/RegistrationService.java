@@ -31,22 +31,22 @@ public interface RegistrationService extends Service {
      * }
      * }' http://localhost:9000/api/registration
      */
-    ServiceCall<NotUsed, Cargo, Done> register();
+    ServiceCall<Cargo, Done> register();
 
-    ServiceCall<NotUsed, NotUsed, Source<Cargo, ?>> getLiveRegistrations();
+    ServiceCall<NotUsed, Source<Cargo, ?>> getLiveRegistrations();
 
-    ServiceCall<NotUsed, NotUsed, PSequence<Cargo>> getAllRegistrations();
+    ServiceCall<NotUsed, PSequence<Cargo>> getAllRegistrations();
 
-    ServiceCall<String, NotUsed, Cargo> getRegistration();
+    ServiceCall<String,  Cargo> getRegistration();
 
     @Override
     default Descriptor descriptor() {
         // @formatter:off
         return named("registrationService").with(
-                restCall(Method.POST, "/api/registration", register()),
-                pathCall("/api/registration/live", getLiveRegistrations()),
-                restCall(Method.GET, "/api/registration/all", getAllRegistrations()),
-                restCall(Method.GET, "/api/registration/:id", getRegistration())
+                restCall(Method.POST, "/api/registration", this::register),
+                pathCall("/api/registration/live", this::getLiveRegistrations),
+                restCall(Method.GET, "/api/registration/all", this::getAllRegistrations),
+                restCall(Method.GET, "/api/registration/:id", this::getRegistration)
         ).withAutoAcl(true);
         // @formatter:on
     }

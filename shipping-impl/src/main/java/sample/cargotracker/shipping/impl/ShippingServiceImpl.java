@@ -31,7 +31,7 @@ public class ShippingServiceImpl implements ShippingService {
     }
 
     @Override
-    public ServiceCall<String, Leg, Done> addLeg() {
+    public ServiceCall<String, Done> addLeg() {
         return (id, request) -> {
             CompletionStage<Cargo> response = registrationService.getRegistration().invoke(request.getCargoId(), NotUsed.getInstance());
             PersistentEntityRef<ShippingCommand> itinerary = persistentEntityRegistry.refFor(ItineraryEntity.class, id);
@@ -40,9 +40,9 @@ public class ShippingServiceImpl implements ShippingService {
     }
 
     @Override
-    public ServiceCall<NotUsed, Itinerary, Done> createItinerary() {
+    public ServiceCall<NotUsed,  Done> createItinerary() {
         return (id, request) -> {
-            // Look up the itinerary for the given ID.
+            // Look up the itinerary for thegiven ID.
             PersistentEntityRef<ShippingCommand> itinerary =
                 persistentEntityRegistry.refFor(ItineraryEntity.class, request.getId());
             // Tell the entity to use the greeting message specified.

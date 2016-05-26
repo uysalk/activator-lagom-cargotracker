@@ -58,8 +58,8 @@ public class RegistrationServiceImpl implements RegistrationService {
      * @return
      */
     @Override
-    public ServiceCall<NotUsed, Cargo, Done> register() {
-        return (id, request) -> {
+    public ServiceCall<Cargo,  Done> register() {
+         return ( request) -> {
             // Publish received entity into topic named "Topic"
             PubSubRef<Cargo> topic = topics.refFor(TopicId.of(Cargo.class, "topic"));
             topic.publish(request);
@@ -72,41 +72,8 @@ public class RegistrationServiceImpl implements RegistrationService {
         };
     }
 
-    /**
-     * Get live registrations service call
-     *
-     * @return
-     */
-    @Override
-    public ServiceCall<NotUsed, NotUsed, Source<Cargo, ?>> getLiveRegistrations() {
-        return (id, req) -> {
-            PubSubRef<Cargo> topic = topics.refFor(TopicId.of(Cargo.class, "topic"));
-            return CompletableFuture.completedFuture(topic.subscriber());
-        };
-    }
 
 
-    /**
-     * Get all persisted Cargo services call
-     * Websockets capable
-     *
-     * @return
-     * @deprecated
-     */
-    public ServiceCall<NotUsed, NotUsed, Source<Cargo, ?>> getAllRegistrationsOld() {
-        log.info("Select all cargo .");
-        return (id, req) -> {
-            Source<Cargo, ?> result = db.select(
-                    "SELECT cargoId, name, description, owner, destination FROM cargo;").map(row ->
-                    Cargo.of(row.getString("cargoId"),
-                            row.getString("name"),
-                            row.getString("description"),
-                            row.getString("owner"),
-                            row.getString("destination")));
-            return CompletableFuture.completedFuture(result);
-
-        };
-    }
 
     /**
      * Get all registered Cargo
@@ -114,7 +81,7 @@ public class RegistrationServiceImpl implements RegistrationService {
      * @return
      */
         @Override
-        public ServiceCall<NotUsed, NotUsed, PSequence<Cargo>> getAllRegistrations() {
+        public ServiceCall<NotUsed,  PSequence<Cargo>> getAllRegistrations() {
             return (userId, req) -> {
                 CompletionStage<PSequence<Cargo>> result = db.selectAll("SELECT cargoid, name, description, owner, destination FROM cargo")
                         .thenApply(rows -> {
@@ -129,7 +96,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             };
         }
 
-    public ServiceCall<String, NotUsed, Cargo> getRegistration() {
+    public ServiceCall<String,  Cargo> getRegistration() {
 
        //TODO Implement meaningful
         return null;

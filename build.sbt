@@ -2,6 +2,8 @@ organization in ThisBuild := "org.lightbend.lagom"
 
 // the Scala version that will be used for cross-compiled libraries
 scalaVersion in ThisBuild := "2.11.7"
+lagomCassandraEnabled in ThisBuild := false
+lagomCassandraPort in ThisBuild := 9042
 
 lazy val registrationApi = project("registration-api")
   .settings(
