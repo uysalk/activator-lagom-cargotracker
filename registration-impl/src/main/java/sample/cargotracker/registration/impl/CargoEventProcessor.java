@@ -69,7 +69,7 @@ public class CargoEventProcessor extends CassandraReadSideProcessor<Registration
         // @formatter:off
         return session.executeCreateTable(
                 "CREATE TABLE IF NOT EXISTS cargo ("
-                        + "cargoId text, name text, description text, owner text, destination text,"
+                        + "cargoid text, name text, description text, owner text, destination text,"
                         + "PRIMARY KEY (cargoId, destination))")
                 .thenCompose(a -> session.executeCreateTable(
                         "CREATE TABLE IF NOT EXISTS cargo_offset ("
@@ -85,7 +85,7 @@ public class CargoEventProcessor extends CassandraReadSideProcessor<Registration
      * @return
      */
     private CompletionStage<Done> prepareWriteCargo(CassandraSession session) {
-        return session.prepare("INSERT INTO cargo (cargoId, name, description, owner,destination) VALUES (?, ?,?,?,?)").thenApply(ps -> {
+        return session.prepare("INSERT INTO cargo (cargoid, name, description, owner,destination) VALUES (?, ?,?,?,?)").thenApply(ps -> {
             setWriteCargo(ps);
             return Done.getInstance();
         });
@@ -137,7 +137,7 @@ public class CargoEventProcessor extends CassandraReadSideProcessor<Registration
      */
     private CompletionStage<List<BoundStatement>> processCargoRegistered(CargoRegistered event, UUID offset) {
         BoundStatement bindWriteCargo = writeCargo.bind();
-        bindWriteCargo.setString("cargoId", event.getCargo().getId());
+        bindWriteCargo.setString("cargoid", event.getCargo().getId());
         bindWriteCargo.setString("name", event.getCargo().getName());
         bindWriteCargo.setString("description", event.getCargo().getDescription());
         bindWriteCargo.setString("owner", event.getCargo().getOwner());

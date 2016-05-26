@@ -28,7 +28,7 @@ public interface ShippingService extends Service {
      *      }
      * }' http://localhost:9000/api/itinerary
      */
-     ServiceCall<NotUsed,Done> createItinerary();
+     ServiceCall<Itinerary,Done> createItinerary();
 
     /**
      * Adds a leg to an existing itinerary.
@@ -47,14 +47,14 @@ public interface ShippingService extends Service {
      * }' http://localhost:9000/api/itinerary/1/leg
      * }</pre>
      */
-    ServiceCall<String, Done> addLeg();
+    ServiceCall<Leg, Done> addLeg();
 
     @Override
     default Descriptor descriptor() {
         // @formatter:off
         return named("shippingService").with(
-            restCall(Method.POST, "/api/itinerary", createItinerary()).withAutoAcl(true),
-            restCall(Method.POST, "/api/itinerary/:itinerary/leg", addLeg()).withAutoAcl(true)
+            restCall(Method.POST, "/api/itinerary", this::createItinerary).withAutoAcl(true),
+            restCall(Method.POST, "/api/itinerary/:itinerary/leg", this::addLeg).withAutoAcl(true)
         );
         // @formatter:on
 

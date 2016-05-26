@@ -31,17 +31,17 @@ public class ShippingServiceImpl implements ShippingService {
     }
 
     @Override
-    public ServiceCall<String, Done> addLeg() {
-        return (id, request) -> {
-            CompletionStage<Cargo> response = registrationService.getRegistration().invoke(request.getCargoId(), NotUsed.getInstance());
-            PersistentEntityRef<ShippingCommand> itinerary = persistentEntityRegistry.refFor(ItineraryEntity.class, id);
+    public ServiceCall<Leg, Done> addLeg() {
+        return ( request) -> {
+            CompletionStage<Cargo> response = registrationService.getRegistration().invoke(request.getCargoId());
+            PersistentEntityRef<ShippingCommand> itinerary = persistentEntityRegistry.refFor(ItineraryEntity.class, request.getId());
             return itinerary.ask(AddLeg.of(request));
         };
     }
 
     @Override
-    public ServiceCall<NotUsed,  Done> createItinerary() {
-        return (id, request) -> {
+    public ServiceCall<Itinerary,  Done> createItinerary() {
+        return ( request) -> {
             // Look up the itinerary for thegiven ID.
             PersistentEntityRef<ShippingCommand> itinerary =
                 persistentEntityRegistry.refFor(ItineraryEntity.class, request.getId());

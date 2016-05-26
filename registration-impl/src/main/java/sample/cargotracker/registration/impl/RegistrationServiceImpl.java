@@ -24,6 +24,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
 
+import static java.util.concurrent.CompletableFuture.completedFuture;
+
 /**
  * Implementation of the RegistrationService.
  */
@@ -82,7 +84,7 @@ public class RegistrationServiceImpl implements RegistrationService {
      */
         @Override
         public ServiceCall<NotUsed,  PSequence<Cargo>> getAllRegistrations() {
-            return (userId, req) -> {
+            return (req) -> {
                 CompletionStage<PSequence<Cargo>> result = db.selectAll("SELECT cargoid, name, description, owner, destination FROM cargo")
                         .thenApply(rows -> {
                             List<Cargo> cargos = rows.stream().map(row -> Cargo.of(row.getString("cargoid"),
@@ -97,8 +99,16 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
 
     public ServiceCall<String,  Cargo> getRegistration() {
+        return (req) -> {
+            System.out.println (req);
+            return completedFuture( Cargo.builder()
+                    .id("")
+                    .description("")
+                    .destination("")
+                    .name("")
+                    .owner("").build());
 
-       //TODO Implement meaningful
-        return null;
+        };
+
     }
 }

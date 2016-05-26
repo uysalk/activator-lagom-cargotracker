@@ -33,7 +33,6 @@ public interface RegistrationService extends Service {
      */
     ServiceCall<Cargo, Done> register();
 
-    ServiceCall<NotUsed, Source<Cargo, ?>> getLiveRegistrations();
 
     ServiceCall<NotUsed, PSequence<Cargo>> getAllRegistrations();
 
@@ -44,7 +43,6 @@ public interface RegistrationService extends Service {
         // @formatter:off
         return named("registrationService").with(
                 restCall(Method.POST, "/api/registration", this::register),
-                pathCall("/api/registration/live", this::getLiveRegistrations),
                 restCall(Method.GET, "/api/registration/all", this::getAllRegistrations),
                 restCall(Method.GET, "/api/registration/:id", this::getRegistration)
         ).withAutoAcl(true);
