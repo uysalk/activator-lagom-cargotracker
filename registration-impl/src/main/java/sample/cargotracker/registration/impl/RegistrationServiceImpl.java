@@ -98,15 +98,13 @@ public class RegistrationServiceImpl implements RegistrationService {
             };
         }
 
-    public ServiceCall<String,  Cargo> getRegistration() {
+    public ServiceCall<String,  Cargo> getRegistration(String id) {
         return (req) -> {
             System.out.println (req);
-            return completedFuture( Cargo.builder()
-                    .id("")
-                    .description("")
-                    .destination("")
-                    .name("")
-                    .owner("").build());
+            PersistentEntityRef<RegistrationCommand> ref =
+                    persistentEntityRegistry.refFor(CargoEntity.class, id);
+
+            return ref.ask(GetCargo.builder().build());
 
         };
 

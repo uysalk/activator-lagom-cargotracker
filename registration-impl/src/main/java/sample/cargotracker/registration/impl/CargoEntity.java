@@ -64,6 +64,9 @@ public class CargoEntity extends PersistentEntity<RegistrationCommand, Registrat
             return ctx.thenPersist(cargoRegistered,  evt -> ctx.reply(Done.getInstance()));
 
         });
+        b.setReadOnlyCommandHandler(GetCargo.class, (cmd, ctx) ->
+                ctx.reply(state().getCargo()));
+
         /**
          * Event handler for the CargoRegistered event.
          */

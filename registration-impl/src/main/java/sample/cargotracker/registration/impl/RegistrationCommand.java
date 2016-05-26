@@ -33,4 +33,12 @@ public interface RegistrationCommand extends Jsonable {
         Cargo getCargo();
     }
 
+    @Value.Immutable
+    @ImmutableStyle
+    @JsonDeserialize(as = GetCargo.class)
+    public interface AbstractGetCargo extends RegistrationCommand, CompressedJsonable,
+            PersistentEntity.ReplyType<Cargo> {
+
+    }
+
 }

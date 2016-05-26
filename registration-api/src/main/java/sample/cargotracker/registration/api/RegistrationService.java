@@ -36,7 +36,7 @@ public interface RegistrationService extends Service {
 
     ServiceCall<NotUsed, PSequence<Cargo>> getAllRegistrations();
 
-    ServiceCall<String,  Cargo> getRegistration();
+    ServiceCall<String,  Cargo> getRegistration(String id);
 
     @Override
     default Descriptor descriptor() {
